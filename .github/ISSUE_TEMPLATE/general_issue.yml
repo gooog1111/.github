@@ -1,0 +1,19 @@
+name: General issue / Общий вопрос
+description: Ask a question or open a general discussion / Задать вопрос или открыть общее обсуждение
+title: "[Question]: "
+body:
+  - type: textarea
+    id: topic
+    attributes:
+      label: Topic / Тема
+      description: What would you like to discuss or ask? / Что вы хотите обсудить или спросить?
+      placeholder: |
+        RU: Опишите вопрос, идею или ситуацию.
+        EN: Describe the question, idea, or situation.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context / Контекст
+      description: Add links, examples, screenshots, logs, or other details if useful. / Добавьте ссылки, примеры, скриншоты, логи или другие детали, если это полезно.
