@@ -20,12 +20,12 @@
 
 ## Copyright (c) 2026 Kiselev Ivan Nikolaevich
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this repository and any associated source code, software, scripts, documentation, technical materials, guides, research, reverse engineering notes, protocol and file format documentation, analysis methods, hardware modification guides, firmware analysis, vulnerability research, diagrams, images, and other related materials (collectively, the "Repository Materials"), to deal in the Repository Materials without restriction, including without limitation the rights to use, copy, modify, adapt, merge, publish, distribute, sublicense, and/or sell copies of the Repository Materials, and to permit persons to whom the Repository Materials are furnished to do so, subject to the following conditions:
+Hereby, permission is granted free of charge to any person who has obtained a copy of this repository and any related source code, software, scripts, documentation, technical materials, instructions, research results, reverse engineering materials, protocol and data format descriptions, analysis methods, hardware modification materials and firmware, vulnerability research, diagrams, images, and other materials (hereinafter referred to as the “Repository Materials”) to use the Repository Materials without any restrictions, including but not limited to the rights to use, copy, modify, adapt, merge, publish, distribute, sublicense, and/or sell copies of the Repository Materials, as well as to permit persons to whom the Repository Materials are provided to perform the said actions, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Repository Materials.
 
-THE REPOSITORY MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY, COMPLETENESS, AND NONINFRINGEMENT.
+THE REPOSITORY MATERIALS ARE PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY, COMPLETENESS, AND NON‑INFRINGEMENT OF THIRD‑PARTY RIGHTS.
 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE REPOSITORY MATERIALS OR THE USE OR OTHER DEALINGS IN THE REPOSITORY MATERIALS.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE REPOSITORY MATERIALS, THE USE THEREOF, OR OTHER DEALINGS THEREWITH.
 
 ---
