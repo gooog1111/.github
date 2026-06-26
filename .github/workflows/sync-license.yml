@@ -1,0 +1,82 @@
+name: Sync LICENSE.md
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - "LICENSE.md"
+      - ".github/workflows/sync-license.yml"
+
+permissions:
+  contents: read
+
+env:
+  SOURCE_FILE: LICENSE.md
+  TARGET_FILE: LICENSE.md
+
+jobs:
+  sync-license:
+    name: Sync LICENSE.md to repositories
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.REPO_SYNC_TOKEN || github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+
+      - name: Sync licence file
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ ! -s "$SOURCE_FILE" ]]; then
+            echo "::error file=$SOURCE_FILE::Source licence file is missing or empty."
+            exit 1
+          fi
+
+          if [[ "${GH_TOKEN}" == "${GITHUB_TOKEN:-}" ]]; then
+            echo "::warning::Using GITHUB_TOKEN. To update all repositories, create a REPO_SYNC_TOKEN secret with repo access."
+          fi
+
+          owner="${{ github.repository_owner }}"
+          workdir="$(mktemp -d)"
+          trap 'rm -rf "$workdir"' EXIT
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          gh repo list "$owner" \
+            --limit 1000 \
+            --json nameWithOwner,isArchived,defaultBranchRef \
+            --jq '.[] | select(.isArchived == false and .defaultBranchRef != null) | [.nameWithOwner, .defaultBranchRef.name] | @tsv' |
+          while IFS=$'\t' read -r repo default_branch; do
+            repo_dir="$workdir/${repo//\//__}"
+            echo "Checking $repo"
+
+            if ! gh repo clone "$repo" "$repo_dir" -- --depth 1 --branch "$default_branch"; then
+              echo "::warning::Cannot clone $repo. Skipping."
+              continue
+            fi
+
+            cp "$SOURCE_FILE" "$repo_dir/$TARGET_FILE"
+
+            (
+              cd "$repo_dir"
+
+              if git diff --quiet -- "$TARGET_FILE" && git ls-files --error-unmatch "$TARGET_FILE" >/dev/null 2>&1; then
+                echo "$repo already has the current $TARGET_FILE"
+                exit 0
+              fi
+
+              git add "$TARGET_FILE"
+              git commit -m "Sync $TARGET_FILE"
+
+              if ! git push origin "HEAD:$default_branch"; then
+                echo "::warning::Cannot push $TARGET_FILE to $repo. Skipping."
+              fi
+            )
+          done
