@@ -1,5 +1,5 @@
-name: Feature request
-description: Suggest an improvement or new feature
+name: Feature request / Предложение функции
+description: Suggest an improvement or new feature / Предложить улучшение или новую функцию
 title: "[Feature]: "
 labels:
   - enhancement
@@ -7,24 +7,33 @@ body:
   - type: textarea
     id: problem
     attributes:
-      label: Problem
-      description: What problem would this feature solve?
+      label: Problem / Проблема
+      description: What problem would this feature solve? / Какую проблему решит эта функция?
+      placeholder: |
+        RU: Опишите проблему или неудобство.
+        EN: Describe the problem or pain point.
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
-      label: Proposal
-      description: Describe the solution you would like to see.
+      label: Proposal / Предложение
+      description: Describe the solution you would like to see. / Опишите решение, которое вы хотите видеть.
+      placeholder: |
+        RU: Опишите желаемое поведение или реализацию.
+        EN: Describe the desired behavior or implementation.
     validations:
       required: true
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternatives
-      description: Describe alternatives you considered, if any.
+      label: Alternatives / Альтернативы
+      description: Describe alternatives you considered, if any. / Опишите альтернативы, если вы их рассматривали.
+      placeholder: |
+        RU: Какие другие варианты возможны?
+        EN: What other options are possible?
   - type: textarea
     id: context
     attributes:
-      label: Additional context
-      description: Add examples, links, screenshots, or implementation notes if useful.
+      label: Additional context / Дополнительный контекст
+      description: Add examples, links, screenshots, or implementation notes if useful. / Добавьте примеры, ссылки, скриншоты или заметки по реализации, если это полезно.
