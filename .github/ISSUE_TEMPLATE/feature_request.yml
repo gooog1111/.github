@@ -1,39 +1,50 @@
-name: Feature request / Предложение функции
-description: Suggest an improvement or new feature / Предложить улучшение или новую функцию
+name: Предложение функции / Feature request
+description: Предложить улучшение или новую функцию / Suggest an improvement or new feature
 title: "[Feature]: "
 labels:
   - enhancement
 body:
+  - type: markdown
+    attributes:
+      value: |
+        [RU 🇷🇺](#) | [EN 🇬🇧](#)
+
+        Сначала заполните русские поля. Английские подсказки указаны ниже для удобства.
+
+        Fill in the Russian fields first. English hints are provided below for convenience.
   - type: textarea
     id: problem
     attributes:
-      label: Problem / Проблема
-      description: What problem would this feature solve? / Какую проблему решит эта функция?
+      label: Проблема / Problem
+      description: Какую проблему решит эта функция? / What problem would this feature solve?
       placeholder: |
         RU: Опишите проблему или неудобство.
+
         EN: Describe the problem or pain point.
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
-      label: Proposal / Предложение
-      description: Describe the solution you would like to see. / Опишите решение, которое вы хотите видеть.
+      label: Предложение / Proposal
+      description: Опишите решение, которое вы хотите видеть. / Describe the solution you would like to see.
       placeholder: |
         RU: Опишите желаемое поведение или реализацию.
+
         EN: Describe the desired behavior or implementation.
     validations:
       required: true
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternatives / Альтернативы
-      description: Describe alternatives you considered, if any. / Опишите альтернативы, если вы их рассматривали.
+      label: Альтернативы / Alternatives
+      description: Опишите альтернативы, если вы их рассматривали. / Describe alternatives you considered, if any.
       placeholder: |
         RU: Какие другие варианты возможны?
+
         EN: What other options are possible?
   - type: textarea
     id: context
     attributes:
-      label: Additional context / Дополнительный контекст
-      description: Add examples, links, screenshots, or implementation notes if useful. / Добавьте примеры, ссылки, скриншоты или заметки по реализации, если это полезно.
+      label: Дополнительный контекст / Additional context
+      description: Добавьте примеры, ссылки, скриншоты или заметки по реализации, если это полезно. / Add examples, links, screenshots, or implementation notes if useful.
