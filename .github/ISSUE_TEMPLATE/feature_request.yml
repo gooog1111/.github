@@ -4,14 +4,6 @@ title: "[Feature]: "
 labels:
   - enhancement
 body:
-  - type: markdown
-    attributes:
-      value: |
-        [RU 🇷🇺](#) | [EN 🇬🇧](#)
-
-        Сначала заполните русские поля. Английские подсказки указаны ниже для удобства.
-
-        Fill in the Russian fields first. English hints are provided below for convenience.
   - type: textarea
     id: problem
     attributes:
