@@ -1,24 +1,33 @@
-name: Bug report / Сообщение об ошибке
-description: Report a reproducible problem / Сообщить о воспроизводимой проблеме
+name: Сообщение об ошибке / Bug report
+description: Сообщить о воспроизводимой проблеме / Report a reproducible problem
 title: "[Bug]: "
 labels:
   - bug
 body:
+  - type: markdown
+    attributes:
+      value: |
+        [RU 🇷🇺](#) | [EN 🇬🇧](#)
+
+        Сначала заполните русские поля. Английские подсказки указаны ниже для удобства.
+
+        Fill in the Russian fields first. English hints are provided below for convenience.
   - type: textarea
     id: description
     attributes:
-      label: Description / Описание
-      description: What happened? / Что произошло?
+      label: Описание / Description
+      description: Что произошло? / What happened?
       placeholder: |
         RU: Кратко опишите проблему.
+
         EN: Briefly describe the problem.
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      label: Steps to reproduce / Шаги воспроизведения
-      description: List the exact steps needed to reproduce the problem. / Укажите точные шаги, чтобы воспроизвести проблему.
+      label: Шаги воспроизведения / Steps to reproduce
+      description: Укажите точные шаги, чтобы воспроизвести проблему. / List the exact steps needed to reproduce the problem.
       placeholder: |
         RU:
         1. ...
@@ -34,28 +43,30 @@ body:
   - type: textarea
     id: expected
     attributes:
-      label: Expected behavior / Ожидаемое поведение
-      description: What did you expect to happen? / Что должно было произойти?
+      label: Ожидаемое поведение / Expected behavior
+      description: Что должно было произойти? / What did you expect to happen?
       placeholder: |
         RU: Опишите ожидаемый результат.
+
         EN: Describe the expected result.
   - type: textarea
     id: actual
     attributes:
-      label: Actual behavior / Фактическое поведение
-      description: What happened instead? / Что произошло вместо этого?
+      label: Фактическое поведение / Actual behavior
+      description: Что произошло вместо этого? / What happened instead?
       placeholder: |
         RU: Опишите фактический результат.
+
         EN: Describe the actual result.
   - type: textarea
     id: logs
     attributes:
-      label: Logs or screenshots / Логи или скриншоты
-      description: Add logs, screenshots, or other details if useful. / Добавьте логи, скриншоты или другие полезные детали.
+      label: Логи или скриншоты / Logs or screenshots
+      description: Добавьте логи, скриншоты или другие полезные детали. / Add logs, screenshots, or other details if useful.
       render: shell
   - type: input
     id: environment
     attributes:
-      label: Environment / Окружение
-      description: OS, app version, device, browser, firmware, or other relevant context. / ОС, версия приложения, устройство, браузер, прошивка или другой важный контекст.
+      label: Окружение / Environment
+      description: ОС, версия приложения, устройство, браузер, прошивка или другой важный контекст. / OS, app version, device, browser, firmware, or other relevant context.
       placeholder: "RU/EN: OS, version, device, browser..."
