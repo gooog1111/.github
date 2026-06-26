@@ -1,19 +1,28 @@
-name: General issue / Общий вопрос
-description: Ask a question or open a general discussion / Задать вопрос или открыть общее обсуждение
+name: Общий вопрос / General issue
+description: Задать вопрос или открыть общее обсуждение / Ask a question or open a general discussion
 title: "[Question]: "
 body:
+  - type: markdown
+    attributes:
+      value: |
+        [RU 🇷🇺](#) | [EN 🇬🇧](#)
+
+        Сначала заполните русские поля. Английские подсказки указаны ниже для удобства.
+
+        Fill in the Russian fields first. English hints are provided below for convenience.
   - type: textarea
     id: topic
     attributes:
-      label: Topic / Тема
-      description: What would you like to discuss or ask? / Что вы хотите обсудить или спросить?
+      label: Тема / Topic
+      description: Что вы хотите обсудить или спросить? / What would you like to discuss or ask?
       placeholder: |
         RU: Опишите вопрос, идею или ситуацию.
+
         EN: Describe the question, idea, or situation.
     validations:
       required: true
   - type: textarea
     id: context
     attributes:
-      label: Context / Контекст
-      description: Add links, examples, screenshots, logs, or other details if useful. / Добавьте ссылки, примеры, скриншоты, логи или другие детали, если это полезно.
+      label: Контекст / Context
+      description: Добавьте ссылки, примеры, скриншоты, логи или другие детали, если это полезно. / Add links, examples, screenshots, logs, or other details if useful.
