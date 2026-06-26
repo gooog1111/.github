@@ -1,4 +1,4 @@
-🇷🇺 [RU](#лицензия-mit) | 🇬🇧 [EN](#mit-license)
+[RU 🇷🇺](#лицензия-mit) | [EN 🇬🇧](#mit-license)
 
 
 # Лицензия MIT
