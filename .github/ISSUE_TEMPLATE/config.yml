@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security report
+    url: https://github.com/gooog1111
+    about: Please do not report security vulnerabilities in public issues. Contact the owner privately.
