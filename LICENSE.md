@@ -1,7 +1,7 @@
-[RU 🇷🇺](#лицензия-mit) | [EN 🇬🇧](#mit-license)
+[RU 🇷🇺](#лицензия) | [EN 🇬🇧](#license)
 
 
-# Лицензия MIT
+# Лицензия
 
 ## Авторские права (c) 2026 Киселев Иван Николаевич
 
@@ -16,7 +16,7 @@
 ---
 
 
-# MIT License
+# License
 
 ## Copyright (c) 2026 Kiselev Ivan Nikolaevich
 
