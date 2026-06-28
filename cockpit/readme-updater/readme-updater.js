@@ -89,7 +89,7 @@
 
   function syncScheduleForm(action) {
     const command = [
-      "enabled=$(systemctl is-enabled " + quote(action.timer) + " 2>/dev/null || true)",
+      "if systemctl is-enabled --quiet " + quote(action.timer) + " 2>/dev/null; then enabled=enabled; else enabled=disabled; fi",
       "calendar=$(systemctl cat " + quote(action.timer) + " 2>/dev/null | awk -F= '/^OnCalendar=/{value=$2} END{print value}')",
       "printf 'enabled=%s\\ncalendar=%s\\n' \"$enabled\" \"$calendar\""
     ].join("; ");
