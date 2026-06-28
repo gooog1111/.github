@@ -1,13 +1,7 @@
 name: Sync LICENSE.md
 
 on:
-  schedule:
-    - cron: "17 3 * * *"
   workflow_dispatch:
-  push:
-    paths:
-      - "LICENSE.md"
-      - ".github/workflows/sync-license.yml"
 
 permissions:
   contents: read
