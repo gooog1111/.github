@@ -14,5 +14,13 @@
     "service": "license-sync.service",
     "timer": "license-sync.timer",
     "defaultCalendar": "Sun *-*-* 04:47:00"
+  },
+  {
+    "id": "github-actions-updater",
+    "title": "GitHub Actions updater",
+    "description": "Обновляет локальную копию .github, Cockpit-панель, systemd units и список actions.",
+    "service": "github-actions-updater.service",
+    "timer": "github-actions-updater.timer",
+    "defaultCalendar": "*-*-* 03:47:00"
   }
 ]

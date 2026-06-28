@@ -18,6 +18,14 @@
       service: "license-sync.service",
       timer: "license-sync.timer",
       defaultCalendar: "Sun *-*-* 04:47:00"
+    },
+    {
+      id: "github-actions-updater",
+      title: "GitHub Actions updater",
+      description: "Обновляет локальную копию .github, Cockpit-панель, systemd units и список actions.",
+      service: "github-actions-updater.service",
+      timer: "github-actions-updater.timer",
+      defaultCalendar: "*-*-* 03:47:00"
     }
   ];
 
@@ -50,6 +58,15 @@
     return $("calendar").value.trim();
   }
 
+  function modeForCalendar(enabled, calendar, action) {
+    if (enabled !== "enabled") return "manual";
+    if (calendar === "hourly") return "hourly";
+    if (calendar === "*-*-* 04:17:00") return "daily";
+    if (calendar === "Sun *-*-* 04:17:00") return "weekly";
+    if (calendar === (action.defaultCalendar || "")) return "custom";
+    return "custom";
+  }
+
   function renderActions() {
     $("action-select").innerHTML = "";
     actions.forEach((action) => {
@@ -66,7 +83,32 @@
     selectedAction = currentAction();
     $("action-description").textContent = selectedAction.description || "";
     $("calendar").value = selectedAction.defaultCalendar || "*-*-* 04:17:00";
+    syncScheduleForm(selectedAction);
     refresh();
+  }
+
+  function syncScheduleForm(action) {
+    const command = [
+      "enabled=$(systemctl is-enabled " + quote(action.timer) + " 2>/dev/null || true)",
+      "calendar=$(systemctl cat " + quote(action.timer) + " 2>/dev/null | awk -F= '/^OnCalendar=/{value=$2} END{print value}')",
+      "printf 'enabled=%s\\ncalendar=%s\\n' \"$enabled\" \"$calendar\""
+    ].join("; ");
+
+    run(command)
+      .then((out) => {
+        const data = {};
+        out.split(/\r?\n/).forEach((line) => {
+          const index = line.indexOf("=");
+          if (index > -1) data[line.slice(0, index)] = line.slice(index + 1);
+        });
+        const calendar = data.calendar || action.defaultCalendar || "*-*-* 04:17:00";
+        $("calendar").value = calendar;
+        $("mode").value = modeForCalendar(data.enabled || "", calendar, action);
+      })
+      .catch(() => {
+        $("calendar").value = action.defaultCalendar || "*-*-* 04:17:00";
+        $("mode").value = "custom";
+      });
   }
 
   function serviceCommands(action) {
@@ -177,19 +219,30 @@
     ].join(" && ");
 
     run(command)
-      .then(() => refresh())
+      .then(() => {
+        syncScheduleForm(action);
+        refresh();
+      })
       .catch((err) => setText("status", err));
   });
 
   $("enable-timer").addEventListener("click", function () {
-    run("systemctl enable --now " + quote(currentAction().timer))
-      .then(() => refresh())
+    const action = currentAction();
+    run("systemctl enable --now " + quote(action.timer))
+      .then(() => {
+        syncScheduleForm(action);
+        refresh();
+      })
       .catch((err) => setText("status", err));
   });
 
   $("disable-timer").addEventListener("click", function () {
-    run("systemctl disable --now " + quote(currentAction().timer))
-      .then(() => refresh())
+    const action = currentAction();
+    run("systemctl disable --now " + quote(action.timer))
+      .then(() => {
+        syncScheduleForm(action);
+        refresh();
+      })
       .catch((err) => setText("status", err));
   });
 
