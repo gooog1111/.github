@@ -209,7 +209,7 @@
     const action = currentAction();
     const mode = $("mode").value;
     const calendar = calendarForMode();
-    const body = "[Timer]\\nOnCalendar=\\nOnCalendar=" + calendar + "\\nPersistent=true\\n";
+    const body = "[Timer]\nOnCalendar=\nOnCalendar=" + calendar + "\nPersistent=true\n";
     const override = "/etc/systemd/system/" + action.timer + ".d/override.conf";
     const command = [
       "mkdir -p " + quote("/etc/systemd/system/" + action.timer + ".d"),
