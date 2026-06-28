@@ -26,6 +26,7 @@ jobs:
 
       - name: Update READMEs in all repositories
         env:
-          README_UPDATE_TOKEN: ${{ secrets.README_UPDATE_TOKEN }}
+          REPO_SYNC_TOKEN: ${{ secrets.REPO_SYNC_TOKEN || github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: python scripts/update_all_readmes.py

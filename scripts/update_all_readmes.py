@@ -11,7 +11,8 @@ from deep_translator import GoogleTranslator
 
 
 OWNER = os.environ["GITHUB_REPOSITORY_OWNER"]
-TOKEN = os.environ["README_UPDATE_TOKEN"]
+TOKEN = os.environ.get("REPO_SYNC_TOKEN", "")
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 WORKDIR = Path("readme-work")
 API = "https://api.github.com"
 
@@ -473,7 +474,10 @@ def update_repo(repo):
 
 def main():
     if not TOKEN:
-        raise SystemExit("README_UPDATE_TOKEN is empty. Add a repo-scoped token to repository secrets.")
+        raise SystemExit("REPO_SYNC_TOKEN is empty. Add a repo-scoped token to repository secrets.")
+
+    if TOKEN == GITHUB_TOKEN:
+        print("::warning::Using GITHUB_TOKEN. To update all repositories, create a REPO_SYNC_TOKEN secret with repo access.")
 
     WORKDIR.mkdir(exist_ok=True)
     updated = []
