@@ -199,9 +199,13 @@
       setText("status", "Токен пустой.");
       return;
     }
+    if (!/^github_pat_[A-Za-z0-9_]+$/.test(token)) {
+      setText("status", "Токен должен начинаться с github_pat_ и содержать только латинские буквы, цифры и подчёркивания.");
+      return;
+    }
 
     const body = "REPO_SYNC_TOKEN=" + token + "\\n";
-    run("printf %s " + quote(body) + " > /etc/readme-updater.env && chmod 600 /etc/readme-updater.env")
+    run("tmp=$(mktemp) && printf %s " + quote(body) + " > \"$tmp\" && install -m 600 \"$tmp\" /etc/readme-updater.env && rm -f \"$tmp\"")
       .then(() => {
         $("token").value = "";
         refresh();
