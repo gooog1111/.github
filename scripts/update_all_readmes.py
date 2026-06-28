@@ -13,18 +13,14 @@ import requests
 from deep_translator import GoogleTranslator
 
 
-OWNER = os.environ["GITHUB_REPOSITORY_OWNER"]
+OWNER = os.environ.get("GITHUB_REPOSITORY_OWNER", "gooog1111")
 TOKEN = os.environ.get("REPO_SYNC_TOKEN", "")
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 WORKDIR = Path("readme-work")
 API = "https://api.github.com"
 
-HEADERS = {
-    "Authorization": f"Bearer {TOKEN}",
-    "Accept": "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28",
-}
-GIT_AUTH_HEADER = "AUTHORIZATION: basic " + base64.b64encode(f"x-access-token:{TOKEN}".encode()).decode()
+HEADERS = {}
+GIT_AUTH_HEADER = ""
 
 
 def run(args, cwd=None, check=True):
@@ -34,6 +30,30 @@ def run(args, cwd=None, check=True):
         print(result.stderr)
         raise RuntimeError(f"Command failed: {' '.join(args)}")
     return result
+
+
+def resolve_token():
+    token = os.environ.get("REPO_SYNC_TOKEN", "")
+    if token:
+        return token
+
+    result = run(["gh", "auth", "token"], check=False)
+    if result.returncode == 0 and result.stdout.strip():
+        return result.stdout.strip()
+
+    return ""
+
+
+def configure_auth(token):
+    global TOKEN, HEADERS, GIT_AUTH_HEADER
+
+    TOKEN = token
+    HEADERS = {
+        "Authorization": f"Bearer {TOKEN}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    GIT_AUTH_HEADER = "AUTHORIZATION: basic " + base64.b64encode(f"x-access-token:{TOKEN}".encode()).decode()
 
 
 def gh(method, path, **kwargs):
@@ -529,8 +549,10 @@ def update_repo(repo):
 
 
 def main():
+    configure_auth(resolve_token())
+
     if not TOKEN:
-        raise SystemExit("REPO_SYNC_TOKEN is empty. Add a repo-scoped token to repository secrets.")
+        raise SystemExit("No token available. Set REPO_SYNC_TOKEN or run gh auth login.")
 
     if TOKEN == GITHUB_TOKEN:
         print("::warning::Using GITHUB_TOKEN. To update all repositories, create a REPO_SYNC_TOKEN secret with repo access.")
