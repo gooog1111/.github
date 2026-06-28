@@ -1,5 +1,28 @@
 (function () {
   const $ = (id) => document.getElementById(id);
+  const configPath = "/etc/github-actions-cockpit/actions.json";
+
+  const defaultActions = [
+    {
+      id: "readme-updater",
+      title: "README updater",
+      description: "Обновляет README.md, README.en.md, traffic-views.png и resources/header.svg во всех репозиториях.",
+      service: "readme-updater.service",
+      timer: "readme-updater.timer",
+      defaultCalendar: "*-*-* 04:17:00"
+    },
+    {
+      id: "license-sync",
+      title: "LICENSE sync",
+      description: "Синхронизирует LICENSE.md из .github во все репозитории.",
+      service: "license-sync.service",
+      timer: "license-sync.timer",
+      defaultCalendar: "Sun *-*-* 04:47:00"
+    }
+  ];
+
+  let actions = defaultActions.slice();
+  let selectedAction = actions[0];
 
   function quote(value) {
     return "'" + String(value).replace(/'/g, "'\"'\"'") + "'";
@@ -13,38 +36,114 @@
     $(id).textContent = text || "";
   }
 
+  function currentAction() {
+    return actions.find((action) => action.id === $("action-select").value) || actions[0];
+  }
+
   function calendarForMode() {
+    const action = currentAction();
     const mode = $("mode").value;
     if (mode === "hourly") return "hourly";
     if (mode === "daily") return "*-*-* 04:17:00";
     if (mode === "weekly") return "Sun *-*-* 04:17:00";
+    if (mode === "manual") return action.defaultCalendar || "*-*-* 04:17:00";
     return $("calendar").value.trim();
   }
 
-  function refresh() {
-    const command = [
-      "systemctl is-enabled readme-updater.timer 2>/dev/null || true",
-      "systemctl is-active readme-updater.timer 2>/dev/null || true",
-      "systemctl is-active readme-updater.service 2>/dev/null || true",
-      "systemctl list-timers readme-updater.timer --no-pager || true",
-      "test -f /etc/readme-updater.env && echo token-file: present || echo token-file: missing",
-      "git -C /srv/github/.github log -1 --oneline 2>/dev/null || true",
-    ].join("; ");
+  function renderActions() {
+    $("action-select").innerHTML = "";
+    actions.forEach((action) => {
+      const option = document.createElement("option");
+      option.value = action.id;
+      option.textContent = action.title || action.id;
+      $("action-select").appendChild(option);
+    });
+    $("actions-config").value = JSON.stringify(actions, null, 2);
+    updateSelectedAction();
+  }
 
-    run(command)
+  function updateSelectedAction() {
+    selectedAction = currentAction();
+    $("action-description").textContent = selectedAction.description || "";
+    $("calendar").value = selectedAction.defaultCalendar || "*-*-* 04:17:00";
+    refresh();
+  }
+
+  function serviceCommands(action) {
+    return [
+      "echo action: " + quote(action.title || action.id),
+      "echo service: " + quote(action.service),
+      "echo timer: " + quote(action.timer),
+      "printf 'timer-enabled='; systemctl is-enabled " + quote(action.timer) + " 2>/dev/null || true",
+      "printf 'timer-active='; systemctl is-active " + quote(action.timer) + " 2>/dev/null || true",
+      "printf 'service-active='; systemctl is-active " + quote(action.service) + " 2>/dev/null || true",
+      "systemctl list-timers " + quote(action.timer) + " --no-pager || true",
+      "test -f /etc/readme-updater.env && echo token-file: present || echo token-file: missing",
+      "git -C /srv/github/.github log -1 --oneline 2>/dev/null || true"
+    ].join("; ");
+  }
+
+  function refresh() {
+    const action = currentAction();
+    run(serviceCommands(action))
       .then((out) => setText("status", out))
       .catch((err) => setText("status", err));
 
-    run("journalctl -u readme-updater.service -n 120 --no-pager || true")
+    run("journalctl -u " + quote(action.service) + " -n 160 --no-pager || true")
       .then((out) => setText("logs", out))
       .catch((err) => setText("logs", err));
   }
 
+  function loadConfig() {
+    run("cat " + quote(configPath) + " 2>/dev/null || true")
+      .then((out) => {
+        if (!out.trim()) {
+          actions = defaultActions.slice();
+        } else {
+          actions = JSON.parse(out);
+        }
+        renderActions();
+      })
+      .catch((err) => {
+        setText("status", err);
+        actions = defaultActions.slice();
+        renderActions();
+      });
+  }
+
+  $("action-select").addEventListener("change", updateSelectedAction);
   $("refresh").addEventListener("click", refresh);
+  $("load-config").addEventListener("click", loadConfig);
+
+  $("save-config").addEventListener("click", function () {
+    let parsed;
+    try {
+      parsed = JSON.parse($("actions-config").value);
+      if (!Array.isArray(parsed)) throw new Error("Config must be a JSON array.");
+    } catch (error) {
+      setText("status", "Ошибка JSON: " + error.message);
+      return;
+    }
+
+    const body = JSON.stringify(parsed, null, 2) + "\n";
+    const command = [
+      "mkdir -p /etc/github-actions-cockpit",
+      "printf %s " + quote(body) + " > " + quote(configPath),
+      "chmod 644 " + quote(configPath)
+    ].join(" && ");
+
+    run(command)
+      .then(() => {
+        actions = parsed;
+        renderActions();
+      })
+      .catch((err) => setText("status", err));
+  });
 
   $("run-now").addEventListener("click", function () {
-    setText("run-output", "Starting readme-updater.service...");
-    run("systemctl start readme-updater.service && systemctl status readme-updater.service --no-pager")
+    const action = currentAction();
+    setText("run-output", "Запуск " + action.service + "...");
+    run("systemctl start " + quote(action.service) + " && systemctl status " + quote(action.service) + " --no-pager")
       .then((out) => {
         setText("run-output", out);
         refresh();
@@ -56,7 +155,7 @@
   });
 
   $("pull-scripts").addEventListener("click", function () {
-    run("git -C /srv/github/.github pull --ff-only")
+    run("git -C /srv/github/.github pull --ff-only && bash /srv/github/.github/scripts/install-github-actions-cockpit.sh")
       .then((out) => {
         setText("run-output", out);
         refresh();
@@ -65,14 +164,16 @@
   });
 
   $("save-schedule").addEventListener("click", function () {
+    const action = currentAction();
     const mode = $("mode").value;
     const calendar = calendarForMode();
     const body = "[Timer]\\nOnCalendar=\\nOnCalendar=" + calendar + "\\nPersistent=true\\n";
+    const override = "/etc/systemd/system/" + action.timer + ".d/override.conf";
     const command = [
-      "mkdir -p /etc/systemd/system/readme-updater.timer.d",
-      "printf %s " + quote(body) + " > /etc/systemd/system/readme-updater.timer.d/override.conf",
+      "mkdir -p " + quote("/etc/systemd/system/" + action.timer + ".d"),
+      "printf %s " + quote(body) + " > " + quote(override),
       "systemctl daemon-reload",
-      mode === "manual" ? "systemctl disable --now readme-updater.timer" : "systemctl enable --now readme-updater.timer",
+      mode === "manual" ? "systemctl disable --now " + quote(action.timer) : "systemctl enable --now " + quote(action.timer)
     ].join(" && ");
 
     run(command)
@@ -81,13 +182,13 @@
   });
 
   $("enable-timer").addEventListener("click", function () {
-    run("systemctl enable --now readme-updater.timer")
+    run("systemctl enable --now " + quote(currentAction().timer))
       .then(() => refresh())
       .catch((err) => setText("status", err));
   });
 
   $("disable-timer").addEventListener("click", function () {
-    run("systemctl disable --now readme-updater.timer")
+    run("systemctl disable --now " + quote(currentAction().timer))
       .then(() => refresh())
       .catch((err) => setText("status", err));
   });
@@ -95,7 +196,7 @@
   $("save-token").addEventListener("click", function () {
     const token = $("token").value.trim();
     if (!token) {
-      setText("status", "Token is empty.");
+      setText("status", "Токен пустой.");
       return;
     }
 
@@ -108,5 +209,5 @@
       .catch((err) => setText("status", err));
   });
 
-  refresh();
+  loadConfig();
 })();

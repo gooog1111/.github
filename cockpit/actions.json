@@ -1,0 +1,18 @@
+[
+  {
+    "id": "readme-updater",
+    "title": "README updater",
+    "description": "Обновляет README.md, README.en.md, traffic-views.png и resources/header.svg во всех репозиториях.",
+    "service": "readme-updater.service",
+    "timer": "readme-updater.timer",
+    "defaultCalendar": "*-*-* 04:17:00"
+  },
+  {
+    "id": "license-sync",
+    "title": "LICENSE sync",
+    "description": "Синхронизирует LICENSE.md из .github во все репозитории.",
+    "service": "license-sync.service",
+    "timer": "license-sync.timer",
+    "defaultCalendar": "Sun *-*-* 04:47:00"
+  }
+]

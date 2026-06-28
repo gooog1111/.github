@@ -1,0 +1,14 @@
+[Unit]
+Description=Sync LICENSE.md to GitHub repositories
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=gooog1111
+WorkingDirectory=/srv/github/.github
+Environment=GITHUB_REPOSITORY_OWNER=gooog1111
+Environment=SOURCE_FILE=LICENSE.md
+Environment=TARGET_FILE=LICENSE.md
+EnvironmentFile=/etc/readme-updater.env
+ExecStart=/bin/bash scripts/sync-license.sh

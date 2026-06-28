@@ -2,7 +2,7 @@
   "version": 0,
   "tools": {
     "readme-updater": {
-      "label": "README Updater",
+      "label": "GitHub Actions",
       "path": "index.html"
     }
   }

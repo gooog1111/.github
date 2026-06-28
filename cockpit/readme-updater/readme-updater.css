@@ -47,6 +47,7 @@ label {
 
 input,
 select,
+textarea,
 button {
   box-sizing: border-box;
   width: 100%;
@@ -55,6 +56,12 @@ button {
   border-radius: 6px;
   padding: 7px 10px;
   font: inherit;
+}
+
+textarea {
+  min-height: 220px;
+  resize: vertical;
+  font-family: Consolas, "Liberation Mono", monospace;
 }
 
 button {

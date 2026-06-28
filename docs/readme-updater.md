@@ -11,6 +11,10 @@ It updates repositories owned by `gooog1111`:
 
 The special `.github/profile/README.md` is not updated by this script.
 
+The server also includes a Cockpit page named `GitHub Actions`. It manages
+README updates, LICENSE sync, schedules, manual runs, logs, and a JSON action
+list for future automations.
+
 ## Authentication
 
 Use one of these options:

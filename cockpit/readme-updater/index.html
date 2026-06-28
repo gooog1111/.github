@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>README Updater</title>
+    <title>GitHub Actions</title>
     <link rel="stylesheet" href="readme-updater.css">
     <script src="../base1/cockpit.js"></script>
   </head>
@@ -10,59 +10,72 @@
     <main>
       <header>
         <div>
-          <h1>README Updater</h1>
-          <p>Centralized sync for repository README files, translations, traffic graphs, and header images.</p>
+          <h1>GitHub Actions</h1>
+          <p>Локальный запуск и расписание задач GitHub: README, лицензии и будущие автоматизации.</p>
         </div>
-        <button id="refresh" type="button">Refresh</button>
+        <button id="refresh" type="button">Обновить</button>
       </header>
 
       <section class="grid">
         <article>
-          <h2>Run</h2>
+          <h2>Действие</h2>
+          <label for="action-select">Action</label>
+          <select id="action-select"></select>
+          <p id="action-description" class="hint"></p>
           <div class="actions">
-            <button id="run-now" type="button">Run now</button>
-            <button id="pull-scripts" type="button">Update scripts</button>
+            <button id="run-now" type="button">Запустить</button>
+            <button id="pull-scripts" type="button">Обновить скрипты</button>
           </div>
           <pre id="run-output"></pre>
         </article>
 
         <article>
-          <h2>Automation</h2>
-          <label for="mode">Mode</label>
+          <h2>Расписание</h2>
+          <label for="mode">Режим</label>
           <select id="mode">
-            <option value="manual">Manual only</option>
-            <option value="hourly">Hourly</option>
-            <option value="daily">Daily at 04:17</option>
-            <option value="weekly">Weekly on Sunday at 04:17</option>
-            <option value="custom">Custom OnCalendar</option>
+            <option value="manual">Только вручную</option>
+            <option value="hourly">Каждый час</option>
+            <option value="daily">Каждый день в 04:17</option>
+            <option value="weekly">Каждое воскресенье в 04:17</option>
+            <option value="custom">Свой OnCalendar</option>
           </select>
 
           <label for="calendar">systemd OnCalendar</label>
           <input id="calendar" type="text" value="*-*-* 04:17:00">
 
           <div class="actions">
-            <button id="save-schedule" type="button">Save schedule</button>
-            <button id="enable-timer" type="button">Enable timer</button>
-            <button id="disable-timer" type="button">Disable timer</button>
+            <button id="save-schedule" type="button">Сохранить</button>
+            <button id="enable-timer" type="button">Включить</button>
+            <button id="disable-timer" type="button">Выключить</button>
           </div>
         </article>
 
         <article>
-          <h2>Token</h2>
-          <p class="hint">The token is stored in <code>/etc/readme-updater.env</code>.</p>
+          <h2>Токен</h2>
+          <p class="hint">Токен хранится в <code>/etc/readme-updater.env</code>.</p>
           <label for="token">REPO_SYNC_TOKEN</label>
-          <input id="token" type="password" autocomplete="off" placeholder="Paste token">
-          <button id="save-token" type="button">Save token</button>
+          <input id="token" type="password" autocomplete="off" placeholder="Вставьте токен">
+          <button id="save-token" type="button">Сохранить токен</button>
         </article>
 
         <article>
-          <h2>Status</h2>
+          <h2>Статус</h2>
           <pre id="status"></pre>
         </article>
       </section>
 
       <section>
-        <h2>Recent Logs</h2>
+        <h2>Конфигурация действий</h2>
+        <p class="hint">Можно добавить новые action позже: укажите <code>id</code>, <code>service</code>, <code>timer</code>, название и описание.</p>
+        <textarea id="actions-config" spellcheck="false"></textarea>
+        <div class="actions">
+          <button id="load-config" type="button">Загрузить конфиг</button>
+          <button id="save-config" type="button">Сохранить конфиг</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Последние логи</h2>
         <pre id="logs"></pre>
       </section>
     </main>
