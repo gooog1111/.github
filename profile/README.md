@@ -55,7 +55,7 @@
 * [Открытые Issues](../../../issues)
 * [Pull Requests](../../../pulls)
 * [Профиль GitHub](https://github.com/gooog1111)
-* [Поддержать проекты](../../SPONSORS.md)
+* [Поддержать проекты](../SPONSORS.md)
 
 <div align="center">
 
@@ -122,7 +122,7 @@ If you find a potential vulnerability, please do not publish it in an open Issue
 * [Open Issues](../../../issues)
 * [Pull Requests](../../../pulls)
 * [GitHub profile](https://github.com/gooog1111)
-* [Support the projects](../../SPONSORS.md)
+* [Support the projects](../SPONSORS.md)
 
 
 <div align="center">
