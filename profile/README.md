@@ -7,10 +7,10 @@
 Здесь публикуются мои проекты с открытым исходным кодом: инструменты, переводы, документация, исследования и практические материалы.
 
 <p>
-  <a href="../../repositories">
+  <a href="../../../?tab=repositories">
     <img src="https://img.shields.io/badge/Repositories-View-blue?style=for-the-badge&logo=github">
   </a>
-  <a href="../../issues">
+  <a href="../../../issues">
     <img src="https://img.shields.io/badge/Issues-Open-success?style=for-the-badge&logo=github">
   </a>
   <a href="https://github.com/gooog1111?tab=repositories">
@@ -51,7 +51,7 @@
 
 ## Полезные ссылки
 
-* [Все репозитории](../../../repositories)
+* [Все репозитории](../../../?tab=repositories)
 * [Открытые Issues](../../../issues)
 * [Pull Requests](../../../pulls)
 * [Профиль GitHub](https://github.com/gooog1111)
@@ -74,10 +74,10 @@
 My open-source projects are published here: tools, translations, documentation, research notes, and practical technical materials.
 
 <p>
-  <a href="../../repositories">
+  <a href="../../../?tab=repositories">
     <img src="https://img.shields.io/badge/Repositories-View-blue?style=for-the-badge&logo=github">
   </a>
-  <a href="../../issues">
+  <a href="../../../issues">
     <img src="https://img.shields.io/badge/Issues-Open-success?style=for-the-badge&logo=github">
   </a>
   <a href="https://github.com/gooog1111?tab=repositories">
@@ -118,7 +118,7 @@ If you find a potential vulnerability, please do not publish it in an open Issue
 
 ## Useful Links
 
-* [All repositories](../../../repositories)
+* [All repositories](../../../?tab=repositories)
 * [Open Issues](../../../issues)
 * [Pull Requests](../../../pulls)
 * [GitHub profile](https://github.com/gooog1111)
