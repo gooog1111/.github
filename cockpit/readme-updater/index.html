@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>README Updater</title>
+    <link rel="stylesheet" href="readme-updater.css">
+    <script src="../base1/cockpit.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>README Updater</h1>
+          <p>Centralized sync for repository README files, translations, traffic graphs, and header images.</p>
+        </div>
+        <button id="refresh" type="button">Refresh</button>
+      </header>
+
+      <section class="grid">
+        <article>
+          <h2>Run</h2>
+          <div class="actions">
+            <button id="run-now" type="button">Run now</button>
+            <button id="pull-scripts" type="button">Update scripts</button>
+          </div>
+          <pre id="run-output"></pre>
+        </article>
+
+        <article>
+          <h2>Automation</h2>
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="manual">Manual only</option>
+            <option value="hourly">Hourly</option>
+            <option value="daily">Daily at 04:17</option>
+            <option value="weekly">Weekly on Sunday at 04:17</option>
+            <option value="custom">Custom OnCalendar</option>
+          </select>
+
+          <label for="calendar">systemd OnCalendar</label>
+          <input id="calendar" type="text" value="*-*-* 04:17:00">
+
+          <div class="actions">
+            <button id="save-schedule" type="button">Save schedule</button>
+            <button id="enable-timer" type="button">Enable timer</button>
+            <button id="disable-timer" type="button">Disable timer</button>
+          </div>
+        </article>
+
+        <article>
+          <h2>Token</h2>
+          <p class="hint">The token is stored in <code>/etc/readme-updater.env</code>.</p>
+          <label for="token">REPO_SYNC_TOKEN</label>
+          <input id="token" type="password" autocomplete="off" placeholder="Paste token">
+          <button id="save-token" type="button">Save token</button>
+        </article>
+
+        <article>
+          <h2>Status</h2>
+          <pre id="status"></pre>
+        </article>
+      </section>
+
+      <section>
+        <h2>Recent Logs</h2>
+        <pre id="logs"></pre>
+      </section>
+    </main>
+    <script src="readme-updater.js"></script>
+  </body>
+</html>

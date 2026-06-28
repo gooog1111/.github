@@ -1,0 +1,12 @@
+[Unit]
+Description=Update GitHub repository READMEs
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=gooog1111
+WorkingDirectory=/srv/github/.github
+Environment=GITHUB_REPOSITORY_OWNER=gooog1111
+EnvironmentFile=/etc/readme-updater.env
+ExecStart=/bin/bash scripts/update-readmes.sh

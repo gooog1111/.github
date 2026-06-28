@@ -1,0 +1,9 @@
+{
+  "version": 0,
+  "tools": {
+    "readme-updater": {
+      "label": "README Updater",
+      "path": "index.html"
+    }
+  }
+}
