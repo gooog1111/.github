@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 import random
@@ -23,6 +24,7 @@ HEADERS = {
     "Accept": "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
 }
+GIT_AUTH_HEADER = "AUTHORIZATION: basic " + base64.b64encode(f"x-access-token:{TOKEN}".encode()).decode()
 
 
 def run(args, cwd=None, check=True):
@@ -393,7 +395,7 @@ def update_repo(repo):
     run([
         "git",
         "-c",
-        f"http.https://github.com/.extraheader=AUTHORIZATION: bearer {TOKEN}",
+        f"http.https://github.com/.extraheader={GIT_AUTH_HEADER}",
         "clone",
         "--depth",
         "1",
@@ -414,7 +416,7 @@ def update_repo(repo):
 
     run(["git", "config", "user.name", "github-actions[bot]"], cwd=repo_dir)
     run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], cwd=repo_dir)
-    run(["git", "config", "http.https://github.com/.extraheader", f"AUTHORIZATION: bearer {TOKEN}"], cwd=repo_dir)
+    run(["git", "config", "http.https://github.com/.extraheader", GIT_AUTH_HEADER], cwd=repo_dir)
 
     repo_info = cached_get(repo_full_name, "", repo_dir / ".cache_repo.json")
     has_issues = bool(repo_info.get("has_issues", True))
@@ -535,6 +537,7 @@ def main():
 
     WORKDIR.mkdir(exist_ok=True)
     updated = []
+    failed = []
 
     for repo in list_repositories():
         try:
@@ -542,10 +545,17 @@ def main():
                 updated.append(repo["full_name"])
         except Exception as exc:
             print(f"Failed to update {repo['full_name']}: {exc}")
+            failed.append(repo["full_name"])
 
     print("Updated repositories:")
     for repo in updated:
         print(f"- {repo}")
+
+    if failed:
+        print("Failed repositories:")
+        for repo in failed:
+            print(f"- {repo}")
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
