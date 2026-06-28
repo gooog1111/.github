@@ -204,10 +204,50 @@
       return;
     }
 
-    const body = "REPO_SYNC_TOKEN=" + token + "\\n";
-    run("tmp=$(mktemp) && printf %s " + quote(body) + " > \"$tmp\" && install -m 600 \"$tmp\" /etc/readme-updater.env && rm -f \"$tmp\"")
-      .then(() => {
+    const command = [
+      "TOKEN_VALUE=" + quote(token) + " python3 - <<'PY'",
+      "from pathlib import Path",
+      "import json",
+      "import os",
+      "import re",
+      "import tempfile",
+      "import urllib.error",
+      "import urllib.request",
+      "",
+      "token = os.environ.get('TOKEN_VALUE', '').strip()",
+      "if not re.fullmatch(r'github_pat_[A-Za-z0-9_]+', token):",
+      "    raise SystemExit('Invalid token format.')",
+      "",
+      "request = urllib.request.Request(",
+      "    'https://api.github.com/user',",
+      "    headers={",
+      "        'Authorization': 'Bearer ' + token,",
+      "        'Accept': 'application/vnd.github+json',",
+      "        'X-GitHub-Api-Version': '2022-11-28',",
+      "        'User-Agent': 'github-actions-cockpit'",
+      "    },",
+      ")",
+      "try:",
+      "    with urllib.request.urlopen(request, timeout=20) as response:",
+      "        data = json.loads(response.read().decode('utf-8'))",
+      "except urllib.error.HTTPError as error:",
+      "    body = error.read().decode('utf-8', errors='replace')",
+      "    raise SystemExit(f'GitHub rejected token: HTTP {error.code}: {body}')",
+      "",
+      "with tempfile.NamedTemporaryFile('w', encoding='utf-8', dir='/etc', delete=False) as handle:",
+      "    handle.write('REPO_SYNC_TOKEN=' + token + '\\n')",
+      "    tmp = handle.name",
+      "os.chmod(tmp, 0o600)",
+      "Path(tmp).replace('/etc/readme-updater.env')",
+      "print('Token saved for GitHub user: ' + data.get('login', 'unknown'))",
+      "PY"
+    ].join("\n");
+
+    run(command)
+      .then((out) => {
         $("token").value = "";
+        setText("status", out);
+        setText("run-output", out);
         refresh();
       })
       .catch((err) => setText("status", err));
