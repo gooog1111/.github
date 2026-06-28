@@ -33,7 +33,7 @@ def run(args, cwd=None, check=True):
 
 
 def resolve_token():
-    token = os.environ.get("REPO_SYNC_TOKEN", "")
+    token = os.environ.get("REPO_SYNC_TOKEN", "").strip()
     if token:
         return token
 
@@ -93,6 +93,8 @@ def list_repositories():
                 "page": page,
             },
         )
+        if batch is None:
+            raise RuntimeError("Cannot list repositories. Check REPO_SYNC_TOKEN credentials.")
         if not batch:
             break
 
@@ -101,13 +103,18 @@ def list_repositories():
             break
         page += 1
 
-    return [
+    filtered = [
         repo
         for repo in repos
         if not repo.get("archived")
         and not repo.get("disabled")
         and repo.get("owner", {}).get("login", "").lower() == OWNER.lower()
     ]
+
+    if not filtered:
+        raise RuntimeError(f"No repositories found for owner {OWNER}. Check token access.")
+
+    return filtered
 
 
 def cached_get(repo_full_name, path, cache_file, params=None):
