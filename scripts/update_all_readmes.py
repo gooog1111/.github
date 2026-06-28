@@ -1,9 +1,11 @@
 import json
 import os
+import random
 import re
 import shutil
 import subprocess
 from datetime import datetime, timezone
+from html import escape
 from pathlib import Path
 
 import requests
@@ -239,6 +241,56 @@ def build_chart(repo_full_name, repo_dir, views):
         print("QuickChart request failed:", exc)
 
 
+def ensure_header_svg(repo_dir, repo_name, repo_url):
+    header = repo_dir / "resources" / "header.svg"
+    if header.exists():
+        return False
+
+    palettes = [
+        ("#111827", "#1f6feb", "#ff6900"),
+        ("#0f172a", "#0891b2", "#f59e0b"),
+        ("#18181b", "#16a34a", "#f97316"),
+        ("#1f2937", "#2563eb", "#dc2626"),
+        ("#0b1120", "#7c3aed", "#06b6d4"),
+        ("#172554", "#14b8a6", "#f43f5e"),
+        ("#1e1b4b", "#0ea5e9", "#eab308"),
+        ("#052e16", "#22c55e", "#e11d48"),
+    ]
+    directions = [
+        ("0", "0", "1", "1"),
+        ("1", "0", "0", "1"),
+        ("0", "1", "1", "0"),
+        ("1", "1", "0", "0"),
+        ("0", "0.5", "1", "0.5"),
+        ("0.5", "0", "0.5", "1"),
+    ]
+
+    colors = random.choice(palettes)
+    x1, y1, x2, y2 = random.choice(directions)
+    safe_name = escape(repo_name)
+    safe_url = escape(repo_url)
+
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-label="{safe_name}">
+  <defs>
+    <linearGradient id="bg" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}">
+      <stop offset="0" stop-color="{colors[0]}"/>
+      <stop offset="0.52" stop-color="{colors[1]}"/>
+      <stop offset="1" stop-color="{colors[2]}"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="260" rx="26" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="212" rx="20" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.24)"/>
+  <text x="600" y="126" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="54" font-weight="700" fill="#ffffff">{safe_name}</text>
+  <text x="600" y="174" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#e5e7eb">{safe_url}</text>
+</svg>
+"""
+
+    header.parent.mkdir(parents=True, exist_ok=True)
+    header.write_text(svg, encoding="utf-8")
+    print(f"Generated {header}")
+    return True
+
+
 def issue_cards(has_issues, issues, lang):
     if not has_issues:
         message = "Issues отключены в настройках репозитория." if lang == "ru" else "Issues are disabled in this repository."
@@ -358,6 +410,8 @@ def update_repo(repo):
         print("Skipping .github profile README by design")
         return False
 
+    ensure_header_svg(repo_dir, repo_name, repo_url)
+
     run(["git", "config", "user.name", "github-actions[bot]"], cwd=repo_dir)
     run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], cwd=repo_dir)
     run(["git", "config", "http.https://github.com/.extraheader", f"AUTHORIZATION: bearer {TOKEN}"], cwd=repo_dir)
@@ -460,7 +514,7 @@ def update_repo(repo):
     en = replace_block(en, "ISSUES_START", "ISSUES_END", issues_block(repo_url, has_issues, issues, issue_count, updated_at, "en"))
     (repo_dir / "README.en.md").write_text(en, encoding="utf-8")
 
-    run(["git", "add", "README.md", "README.en.md", "traffic-views.png"], cwd=repo_dir, check=False)
+    run(["git", "add", "README.md", "README.en.md", "traffic-views.png", "resources/header.svg"], cwd=repo_dir, check=False)
     diff = run(["git", "diff", "--cached", "--quiet"], cwd=repo_dir, check=False)
     if diff.returncode == 0:
         print(f"No changes in {repo_full_name}")
