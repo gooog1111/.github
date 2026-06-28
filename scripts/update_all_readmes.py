@@ -56,7 +56,8 @@ def configure_auth(token):
     GIT_AUTH_HEADER = "AUTHORIZATION: basic " + base64.b64encode(f"x-access-token:{TOKEN}".encode()).decode()
 
 
-def gh(method, path, **kwargs):
+def gh(method, path, quiet_statuses=None, **kwargs):
+    quiet_statuses = set(quiet_statuses or [])
     url = path if path.startswith("https://") else f"{API}{path}"
     try:
         response = requests.request(method, url, headers=HEADERS, timeout=30, **kwargs)
@@ -65,6 +66,8 @@ def gh(method, path, **kwargs):
         return None
 
     if response.status_code >= 400:
+        if response.status_code in quiet_statuses:
+            return None
         print(f"GitHub API error {response.status_code}: {method} {path}")
         print(response.text[:400])
         return None
@@ -117,7 +120,7 @@ def list_repositories():
     return filtered
 
 
-def cached_get(repo_full_name, path, cache_file, params=None):
+def cached_get(repo_full_name, path, cache_file, params=None, quiet_statuses=None):
     cache = Path(cache_file)
     if cache.exists():
         age = datetime.now().timestamp() - cache.stat().st_mtime
@@ -127,7 +130,7 @@ def cached_get(repo_full_name, path, cache_file, params=None):
             except Exception:
                 pass
 
-    data = gh("GET", f"/repos/{repo_full_name}{path}", params=params) or {}
+    data = gh("GET", f"/repos/{repo_full_name}{path}", params=params, quiet_statuses=quiet_statuses) or {}
     cache.write_text(json.dumps(data), encoding="utf-8")
     return data
 
@@ -450,8 +453,20 @@ def update_repo(repo):
     stars = repo_info.get("stargazers_count", 0)
     forks = repo_info.get("forks_count", 0)
 
-    views = cached_get(repo_full_name, "/traffic/views", repo_dir / ".cache_views.json", params={"per": "day"})
-    clones = cached_get(repo_full_name, "/traffic/clones", repo_dir / ".cache_clones.json", params={"per": "day"})
+    views = cached_get(
+        repo_full_name,
+        "/traffic/views",
+        repo_dir / ".cache_views.json",
+        params={"per": "day"},
+        quiet_statuses={403},
+    )
+    clones = cached_get(
+        repo_full_name,
+        "/traffic/clones",
+        repo_dir / ".cache_clones.json",
+        params={"per": "day"},
+        quiet_statuses={403},
+    )
 
     local_views = 0
     if has_issues:
@@ -459,7 +474,12 @@ def update_repo(repo):
         view_issue = next((issue for issue in all_issues if issue.get("title") == "views-counter"), None) if isinstance(all_issues, list) else None
 
         if not view_issue:
-            view_issue = gh("POST", f"/repos/{repo_full_name}/issues", json={"title": "views-counter", "body": "0"})
+            view_issue = gh(
+                "POST",
+                f"/repos/{repo_full_name}/issues",
+                json={"title": "views-counter", "body": "0"},
+                quiet_statuses={403},
+            )
 
         if isinstance(view_issue, dict):
             try:
@@ -469,7 +489,12 @@ def update_repo(repo):
 
             local_views += 1
             if "number" in view_issue:
-                gh("PATCH", f"/repos/{repo_full_name}/issues/{view_issue['number']}", json={"body": str(local_views)})
+                gh(
+                    "PATCH",
+                    f"/repos/{repo_full_name}/issues/{view_issue['number']}",
+                    json={"body": str(local_views)},
+                    quiet_statuses={403},
+                )
 
     releases = cached_get(repo_full_name, "/releases", repo_dir / ".cache_releases.json", params={"per_page": 100})
     dl_latest = 0
