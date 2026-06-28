@@ -10,9 +10,20 @@
 времени на доработки, документацию, тесты на реальном железе и поддержку
 репозиториев в рабочем состоянии.
 
-## Быстрый перевод
+## Платформы
 
-<p align="center">
+<p align="left">
+  <a href="https://boosty.to/gooog1111/" target="_blank">
+    <img src="https://img.shields.io/badge/Boosty-gooog1111-f15f2c?style=for-the-badge" alt="Boosty">
+  </a>
+  <a href="https://www.donationalerts.com/r/gooog1111" target="_blank">
+    <img src="https://img.shields.io/badge/DonationAlerts-gooog1111-f57c00?style=for-the-badge" alt="DonationAlerts">
+  </a>
+</p>
+
+## Быстрый перевод по России
+
+<p align="left">
   <a href="https://t.tb.ru/c2c-qr-choose-bank?requisiteNumber=+79996363556&bankCode=100000000004" target="_blank">
     <img src="https://img.shields.io/badge/СБП-Т Банк | Sber-blue?style=for-the-badge&logo=none" alt="СБП">
   </a>
@@ -49,6 +60,17 @@
 Thank you if my projects have been useful to you. Support helps me spend more
 time on improvements, documentation, testing with real hardware, and keeping the
 repositories in good working shape.
+
+## Platforms
+
+<p align="left">
+  <a href="https://boosty.to/gooog1111/" target="_blank">
+    <img src="https://img.shields.io/badge/Boosty-gooog1111-f15f2c?style=for-the-badge" alt="Boosty">
+  </a>
+  <a href="https://www.donationalerts.com/r/gooog1111" target="_blank">
+    <img src="https://img.shields.io/badge/DonationAlerts-gooog1111-f57c00?style=for-the-badge" alt="DonationAlerts">
+  </a>
+</p>
 
 ## Crypto and tokens
 
