@@ -10,9 +10,6 @@
   <a href="../../../?tab=repositories">
     <img src="https://img.shields.io/badge/Repositories-View-blue?style=for-the-badge&logo=github">
   </a>
-  <a href="../../../issues">
-    <img src="https://img.shields.io/badge/Issues-Open-success?style=for-the-badge&logo=github">
-  </a>
   <a href="https://github.com/gooog1111?tab=repositories">
     <img src="https://komarev.com/ghpvc/?username=gooog1111&style=for-the-badge&label=Profile+Views">
   </a>
@@ -52,7 +49,6 @@
 ## Полезные ссылки
 
 * [Все репозитории](../../../?tab=repositories)
-* [Открытые Issues](../../../issues)
 * [Pull Requests](../../../pulls)
 * [Профиль GitHub](https://github.com/gooog1111)
 * [Поддержать проекты](https://github.com/gooog1111/.github/blob/main/SPONSORS.md)
@@ -76,9 +72,6 @@ My open-source projects are published here: tools, translations, documentation, 
 <p>
   <a href="../../../?tab=repositories">
     <img src="https://img.shields.io/badge/Repositories-View-blue?style=for-the-badge&logo=github">
-  </a>
-  <a href="../../../issues">
-    <img src="https://img.shields.io/badge/Issues-Open-success?style=for-the-badge&logo=github">
   </a>
   <a href="https://github.com/gooog1111?tab=repositories">
     <img src="https://komarev.com/ghpvc/?username=gooog1111&style=for-the-badge&label=Profile+Views">
@@ -119,7 +112,6 @@ If you find a potential vulnerability, please do not publish it in an open Issue
 ## Useful Links
 
 * [All repositories](../../../?tab=repositories)
-* [Open Issues](../../../issues)
 * [Pull Requests](../../../pulls)
 * [GitHub profile](https://github.com/gooog1111)
 * [Support the projects](https://github.com/gooog1111/.github/blob/main/SPONSORS.md)
