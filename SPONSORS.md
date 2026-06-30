@@ -70,7 +70,14 @@ repositories in good working shape.
   <a href="https://www.donationalerts.com/r/gooog1111" target="_blank">
     <img src="https://img.shields.io/badge/DonationAlerts-gooog1111-f57c00?style=for-the-badge" alt="DonationAlerts">
   </a>
+
 </p>
+
+## Card2Card
+
+<a href="https://multitransfer.online/ru/card-to-card?account=41001291239620&client=yoomoney" target="_blank">
+    <img src="https://img.shields.io/badge/VISA-purple?style=for-the-badge&logo=none" alt="VISA">
+  </a>
 
 ## Crypto and tokens
 
